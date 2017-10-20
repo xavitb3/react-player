@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import { propTypes, defaultProps } from './props'
+import { fadeVolume } from './utils'
 
 const SEEK_ON_PLAY_EXPIRY = 5000
 
@@ -56,14 +57,27 @@ export default class Player extends Component {
       this.player.pause()
     }
     if (volume !== nextProps.volume && !nextProps.muted) {
-      this.player.setVolume(nextProps.volume)
+      if (this.cancelVolumeFade) {
+        this.cancelVolumeFade()
+      }
+      if (nextProps.volumeFade) {
+        this.cancelVolumeFade = fadeVolume(this.setVolume, volume, nextProps.volume, nextProps.volumeFade)
+      } else {
+        this.player.setVolume(nextProps.volume)
+      }
     }
     if (muted !== nextProps.muted) {
+      if (this.cancelVolumeFade) {
+        this.cancelVolumeFade()
+      }
       this.player.setVolume(nextProps.muted ? 0 : nextProps.volume)
     }
     if (playbackRate !== nextProps.playbackRate && this.player.setPlaybackRate) {
       this.player.setPlaybackRate(nextProps.playbackRate)
     }
+  }
+  setVolume = volume => {
+    this.player.setVolume(volume)
   }
   getCurrentTime () {
     if (!this.isReady) return null

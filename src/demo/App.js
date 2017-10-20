@@ -121,6 +121,7 @@ export default class App extends Component {
               playing={playing}
               playbackRate={playbackRate}
               volume={volume}
+              volumeFade={3}
               muted={muted}
               soundcloudConfig={soundcloudConfig}
               vimeoConfig={vimeoConfig}

@@ -6,6 +6,7 @@ import { DEPRECATED_CONFIG_PROPS } from './props'
 const MATCH_START_QUERY = /[?&#](?:start|t)=([0-9hms]+)/
 const MATCH_START_STAMP = /(\d+)(h|m|s)/g
 const MATCH_NUMERIC = /^\d+$/
+const FADE_VOLUME_INTERVAL = 100
 
 // Parse YouTube URL for a start time param, ie ?t=1h14m30s
 // and return the start time in seconds
@@ -111,4 +112,21 @@ export function callPlayer (method, ...args) {
 export function isObject (val) {
   if (val === null) return false
   return typeof val === 'function' || typeof val === 'object'
+}
+
+export function fadeVolume (setVolume, current, target, seconds) {
+  const steps = seconds * 1000 / FADE_VOLUME_INTERVAL
+  const step = (target - current) / steps
+  let volume = current
+  let count = 0
+  let interval = setInterval(() => {
+    volume += step
+    console.log(volume, step)
+    count++
+    setVolume(volume)
+    if (count === steps) {
+      clearInterval(interval)
+    }
+  }, FADE_VOLUME_INTERVAL)
+  return () => clearInterval(interval)
 }
