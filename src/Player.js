@@ -18,9 +18,7 @@ export default class Player extends Component {
   onDurationCalled = false
   componentDidMount () {
     this.mounted = true
-    if (this.player) {
-      this.player.load(this.props.url)
-    }
+    this.player.load(this.props.url)
     this.progress()
   }
   componentWillUnmount () {
@@ -113,9 +111,7 @@ export default class Player extends Component {
     // When seeking before player is ready, store value and seek later
     if (!this.isReady && amount !== 0) {
       this.seekOnPlay = amount
-      setTimeout(() => {
-        this.seekOnPlay = null
-      }, SEEK_ON_PLAY_EXPIRY)
+      setTimeout(() => { this.seekOnPlay = null }, SEEK_ON_PLAY_EXPIRY)
       return
     }
     if (amount > 0 && amount < 1) {

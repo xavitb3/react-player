@@ -20,15 +20,15 @@ const MULTIPLE_SOURCES = [
 
 class App extends Component {
   state = {
-    url: null,
-    playing: true,
+    url: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8',
+    playing: false,
     volume: 0.8,
-    muted: false,
+    muted: true,
     played: 0,
     loaded: 0,
     duration: 0,
     playbackRate: 1.0,
-    loop: false
+    loop: true
   }
   load = url => {
     this.setState({

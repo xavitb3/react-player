@@ -11,7 +11,6 @@ const MATCH_URL = /(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?
 export class YouTube extends Component {
   static displayName = 'YouTube'
   static canPlay = url => MATCH_URL.test(url)
-  static loopOnEnded = true
 
   callPlayer = callPlayer
   load (url, isReady) {
@@ -48,12 +47,15 @@ export class YouTube extends Component {
     }, onError)
   }
   onStateChange = ({ data }) => {
-    const { onPlay, onPause, onBuffer, onEnded, onReady } = this.props
+    const { onPlay, onPause, onBuffer, onEnded, onReady, loop } = this.props
     const { PLAYING, PAUSED, BUFFERING, ENDED, CUED } = window[SDK_GLOBAL].PlayerState
     if (data === PLAYING) onPlay()
     if (data === PAUSED) onPause()
     if (data === BUFFERING) onBuffer()
-    if (data === ENDED) onEnded()
+    if (data === ENDED) {
+      onEnded()
+      if (loop) this.callPlayer('playVideo')
+    }
     if (data === CUED) onReady()
   }
   play () {
