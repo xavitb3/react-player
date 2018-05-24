@@ -18,7 +18,9 @@ export default class Player extends Component {
   onDurationCalled = false
   componentDidMount () {
     this.mounted = true
-    this.player.load(this.props.url)
+    if (this.player) {
+      this.player.load(this.props.url)
+    }
     this.progress()
   }
   componentWillUnmount () {
@@ -198,6 +200,9 @@ export default class Player extends Component {
   }
   render () {
     const Player = this.props.activePlayer
+    if (!Player) {
+      return null
+    }
     return (
       <Player
         {...this.props}
